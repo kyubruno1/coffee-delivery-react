@@ -1,60 +1,90 @@
-// import { ShoppingCartSimple  } from 'phosphor-react'
-import { Minus, Plus, Trash } from "phosphor-react"
+import { Minus, Plus, ShoppingCartSimple, Trash } from "phosphor-react"
 import { useLocation } from "react-router-dom"
-import expresso from "../../assets/Type=Expresso.svg"
-import { CardDiv, CoffeeImageDiv, PriceAndAction, StyledActions, StyledShoppingCartSimple, Tags } from "./styles"
+import { CardDiv, CoffeeImageDiv, PriceAndAction, StyledActions, Tags } from "./styles"
+import { useContext, useState } from "react"
+import { CartContext } from "../../context/CartContext"
 
-export function Card() {
+export interface Product {
+	image: string,
+	name: string,
+	tags: string[],
+	description: string,
+	price: string
+}
+
+interface CardProps {
+	product: Product,
+	itemQuantity?: number
+}
+
+
+
+export function Card({ product, itemQuantity = 1 }: CardProps) {
 	const location = useLocation()
-
 	const isCheckout = location.pathname === "/checkout"
 
+	const { addToCart, updateQuantity, removeFromCart } = useContext(CartContext);
+
+	const [quantity, setQuantity] = useState(itemQuantity ?? 1);
+
+
+
+	function plusButtonHandler() {
+		//Atualiza o estado e na linha debaixo atualiza o estado no contexto
+		setQuantity((prevQuantity) => prevQuantity + 1);
+		updateQuantity(product.name, quantity + 1);
+
+	}
+
+	function minusButtonHandler() {
+		//Atualiza o estado e na linha debaixo atualiza o estado no contexto
+		setQuantity((prevQuantity) => Math.max(prevQuantity - 1, 1));
+		updateQuantity(product.name, Math.max(quantity - 1, 1));
+	}
+
+	const productTotalPrice = parseFloat(product.price.replace(",", ".")) * itemQuantity
 
 	return (
 		<CardDiv isCheckout={isCheckout}>
 			<CoffeeImageDiv isCheckout={isCheckout}>
-				<img src={expresso} />
+				<img src={product.image} />
 			</CoffeeImageDiv>
-			{!isCheckout && <Tags>Tradicional</Tags>}
+			<Tags>
+				{!isCheckout &&
+					product.tags.map((tag, index) => (
+						<span key={index}>{tag}</span>
+					))
+				}
+			</Tags>
 			<div>
-				<h5>Expresso Tradicional</h5>
+				<h5>{product.name}</h5>
 
-				{!isCheckout && <p>O tradicional café feito com água quente e grãos moídos</p>}
+				{!isCheckout && <p>{product.description}</p>}
 				<PriceAndAction isCheckout={isCheckout}>
 					{
 						!isCheckout &&
-						<p>R$ <span>9,90</span></p>
+						<p>R$ <span>{productTotalPrice.toFixed(2).replace(".", ",")}</span></p>
 					}
 					<StyledActions>
-						{!isCheckout ? (
-							<>
-								<Minus size={22} />
-								<span>1</span>
-								<Plus size={22} />
-							</>
-						) : (
-							<>
-								<Minus size={14} />
-								<span>1</span>
-								<Plus size={14} />
-							</>
-						)}
+						<Minus size={isCheckout ? 14 : 22} onClick={minusButtonHandler} />
+						<span>{quantity}</span>
+						<Plus size={isCheckout ? 14 : 22} onClick={plusButtonHandler} />
 					</StyledActions>
 					{!isCheckout &&
 						<button>
-							<StyledShoppingCartSimple weight="fill" size={22} />
+							<ShoppingCartSimple weight="fill" size={22} onClick={() => addToCart(product, quantity)} />
 						</button>
 					}
 
 					{isCheckout &&
-						<button>
+						<button onClick={() => removeFromCart(product.name)}>
 							<Trash size={16} />
 							Remover
 						</button>
 					}
 				</PriceAndAction>
 			</div>
-			{isCheckout && <p>R$ <span>9,90</span></p>}
+			{isCheckout && <p>R$ <span>{productTotalPrice.toFixed(2).replace(".", ",")}</span></p>}
 		</CardDiv>
 	)
 }

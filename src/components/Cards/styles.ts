@@ -62,15 +62,23 @@ export const CardDiv = styled.div<ContainerProps>`
     }
 `
 
-export const Tags = styled.div`
-    background: ${props => props.theme["yellow-light"]};
-    padding: 0.25rem 0.5rem;
-    color: ${props => props.theme["yellow-dark"]};
-    text-transform: uppercase;
-    border-radius: 6px;
-    ${props => css`
-        ${props.theme.typography.tag};
-    `}
+export const Tags = styled.p`
+    display: flex;
+    flex-direction: row;
+    gap: 0.25rem;
+
+
+    span {
+        background: ${props => props.theme["yellow-light"]};
+        padding: 0.25rem 0.5rem;
+        color: ${props => props.theme["yellow-dark"]};
+        text-transform: uppercase;
+        border-radius: 6px;
+        ${props => css`
+            ${props.theme.typography.tag};
+        `}
+
+    }
 `
 
 export const CoffeeImageDiv = styled.div<ContainerProps>`
@@ -122,7 +130,7 @@ export const PriceAndAction = styled.div<ContainerProps>`
         align-items: center;
         justify-content: center;
         padding: 0.5rem;
-        background: ${props => props.theme["purple-dark"]};
+        background: ${props => props.theme["purple"]};
         border-radius: 6px;
         border: none;
         cursor: pointer;
@@ -130,6 +138,10 @@ export const PriceAndAction = styled.div<ContainerProps>`
 
         &:hover {
             background: ${props => props.theme["purple-dark"]};
+        }
+
+        svg {
+            color: ${props => props.theme["white"]};
         }
 
 
@@ -140,6 +152,7 @@ export const PriceAndAction = styled.div<ContainerProps>`
             svg {
                 color: ${props.theme['purple']};
                 margin-top: -2px;
+
              }
             ${props.theme.typography.buttonM}
             text-transform: uppercase;
@@ -185,6 +198,7 @@ export const StyledActions = styled.div`
         color: ${props => props.theme["purple"]};
         cursor: pointer;
         transition: color 0.3s;
+
         &:hover{
             color: ${props => props.theme["purple-dark"]}
         }
@@ -195,7 +209,7 @@ export const StyledActions = styled.div`
 `
 
 export const StyledShoppingCartSimple = styled(ShoppingCartSimple)`
-    color: ${props => props.theme["white"]};
+    /* color: ${props => props.theme["white"]}; */
 
     /* &:hover{
         color: ${props => props.theme["base-text"]};

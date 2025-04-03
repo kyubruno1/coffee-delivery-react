@@ -2,12 +2,23 @@ import { MapPin } from "phosphor-react"
 import { NavLink } from "react-router-dom"
 import CoffeeDeliveryLogo from "../../assets/CoffeeDeliveryLogo.svg"
 import { CartButton, HeaderContainer, StyledShoppingCartSimple } from "./styles"
+import { useContext } from "react";
+import { CartContext } from "../../context/CartContext";
 
 export function Header() {
-	const hasItemInCart = false;
+	const { cart } = useContext(CartContext)
+
+	const hasItemInCart = cart.length ? true : false;
+
+	const amountOfItemsInCart = cart.reduce((acc, item) => {
+		return acc + item.quantity;
+	}, 0)
+
 	return (
 		<HeaderContainer>
-			<img src={CoffeeDeliveryLogo} />
+			<NavLink to="/">
+				<img src={CoffeeDeliveryLogo} />
+			</NavLink>
 			<nav>
 				<div>
 					<MapPin size={22} weight="fill" />
@@ -17,7 +28,7 @@ export function Header() {
 					<CartButton>
 						<StyledShoppingCartSimple size={22} weight="fill" />
 						{hasItemInCart &&
-							<span>3</span>
+							<span>{amountOfItemsInCart}</span>
 						}
 					</CartButton>
 				</NavLink>

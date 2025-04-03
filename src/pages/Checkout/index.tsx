@@ -4,9 +4,21 @@ import { Header } from "../../components/Header"
 import { BaseInput, Cart, CheckoutContainer, CheckoutFormContainer, FormContainer, Info, PaymentTypeContainer, PaymentTypeMethod, Separator, Submitted, Summary } from "./styles"
 import illustrationSubsmitted from '../../assets/IllustrationSubmitted.svg'
 import { HeroIcon } from "../Home/styles"
+import { useContext, useEffect, useState } from "react"
+import { CartContext } from "../../context/CartContext"
 
 export function Checkout() {
-	const submitted = true;
+	const submitted = false;
+	const { cart } = useContext(CartContext)
+
+	const deliveryPrice = 3.5
+
+	const [totalPriceItems, setTotalPriceItems] = useState(0);
+
+	useEffect(() => {
+		const newTotal = cart.reduce((acc, item) => acc + parseFloat(item.product.price.replace(",", ".")) * item.quantity, 0);
+		setTotalPriceItems(newTotal);
+	}, [cart]);
 
 	return (
 		<>
@@ -72,15 +84,17 @@ export function Checkout() {
 					<div>
 						<h2>Cafés selecionados</h2>
 						<Cart>
-							<Card />
-							<Separator />
-							<Card />
-							<Separator />
+							{cart.map((item) => (
+								<>
+									<Card product={item.product} itemQuantity={item.quantity} />
+									<Separator />
+								</>
 
+							))}
 							<Summary>
-								<p>Total de itens <span>R$ 29,70</span></p>
-								<p>Entrega <span>R$ 3,50</span></p>
-								<p>Total <span>R$ 33,20</span></p>
+								<p>Total de itens <span>R$ <span>{totalPriceItems.toFixed(2).replace('.', ',')}</span></span></p>
+								<p>Entrega <span>R$ <span>{deliveryPrice.toFixed(2).replace('.', ',')}</span></span></p>
+								<p>Total <span>R$ <span>{(totalPriceItems + deliveryPrice).toFixed(2).replace('.', ',')}</span></span></p>
 							</Summary>
 
 
