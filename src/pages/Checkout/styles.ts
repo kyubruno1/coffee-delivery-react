@@ -14,11 +14,9 @@ export const CheckoutContainer = styled.div`
     >div {
         width: 100%;
     }
-    
-    
 `
 
-const BaseContainer = styled.div`
+export const BaseContainer = styled.div`
     width: 100%;
     background: ${props => props.theme["base-card"]};
     padding: 2.5rem;
@@ -56,7 +54,6 @@ export const FormContainer = styled.div`
     display: flex;
     gap: 1rem;
     flex-direction: column;
-    /* flex-wrap: wrap; */
 
      p {
         display: flex;
@@ -82,7 +79,6 @@ export const BaseInput = styled.input<InputProps>`
     `}
 
     &:focus {
-        /* border: 1px solid ${props => props.theme["yellow-dark"]}; */
         outline: 1px solid ${props => props.theme["yellow-dark"]};
     }
 
@@ -98,46 +94,48 @@ export const PaymentTypeContainer = styled(BaseContainer)`
         color: ${props => props.theme["purple"]};
     }
 
-    div {
-
-    }
 
 `
 
 export const PaymentTypeMethod = styled.div`
     display: flex;
     gap: 0.875rem;
-    
-    div {
-        display: flex;
-        padding: 1rem;
-        gap: 0.875rem;
-        border-radius: 6px;
-        background: ${props => props.theme["base-button"]};
-        width: 100%;
-        border: 1px solid transparent;
-        span {
-            ${props => css`
-                ${props.theme.typography.buttonM}    
-            `}
-            text-transform: uppercase;
-        }
-
-        &:hover{
-            background: ${props => props.theme["base-hover"]}
-
-        }
-
-
-        //Alterar depois para o estado de selecionado
-        &:focus{
-            border: 1px solid ${props => props.theme['purple']};
-            background: ${props => props.theme['purple-light']}
-        }
-    }
 `
 
-export const CheckoutCartContainer = styled(BaseContainer)`
+interface PaymentLabelProps {
+    selected: boolean;
+}
+
+export const PaymentLabel = styled.label<PaymentLabelProps>`
+    display: flex;
+    padding: 1rem;
+    gap: 0.875rem;
+    border-radius: 6px;
+    background: ${(props) => (props.selected ? props.theme["purple-light"] : props.theme["base-button"])};
+    width: 100%;
+    border: ${(props) => (props.selected ? `1px solid ${props.theme["purple"]}` : '1px solid transparent')};
+    
+    span {
+        ${props => css`
+            ${props.theme.typography.buttonM}    
+        `}
+        text-transform: uppercase;
+    }
+
+    &:hover{
+        background: ${props => props.theme["base-hover"]}
+
+    }
+
+    input[type="radio"] {
+        appearance: none;  
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        width: 0;
+        height: 0;
+        margin: 0;
+        position: absolute;
+    }
 
 `
 
@@ -167,12 +165,16 @@ export const Cart = styled.div`
         &:hover {
             background: ${props => props.theme['yellow-dark']};
         }
+
+        &:disabled {
+            background:rgb(139, 109, 27);
+            color: #9f9f9f;
+        }
     } 
 
 `
 
 export const Summary = styled.div`
-    
     display: flex;
     flex-direction: column;
     gap: 0.875rem;
@@ -200,78 +202,3 @@ export const Separator = styled.div`
     border-top: 1px solid ${props => props.theme['base-button']};
 `;
 
-export const Submitted = styled.div`
-    box-sizing: border-box;
-    width: 100%;
-    
-
-    h1 {
-        ${props => props.theme.typography.titleL}
-        color: ${props => props.theme['yellow-dark']};
-    }
-
-    h3 {
-        ${props => props.theme.typography.textL}
-        color: ${props => props.theme['base-subtitle']};
-    }
-
-    svg {
-        /* padding: 10px; */
-    }
-
-    > div {
-        position: relative;
-        margin-top: 2.5rem;
-        display: flex;
-        flex-direction: column;
-        padding: 2.5rem;
-        border-radius: 6px 36px 6px 36px;
-        z-index: 1;
-        gap: 2rem 0.875rem;
-
-
-        div {
-            display: flex;
-            
-            span:first-child {
-                display: flex;
-                margin-right: 0.875rem;
-            }
-
-            span {
-                display: flex;
-                flex-direction: column;
-            }
-
-            div {
-                    display: flex;
-                    flex-direction: column;
-                    ${props => props.theme.typography.textM}
-                    span:last-child{
-                        font-weight: bold;
-                        
-                    }
-                }
-            }
-        }
-
-    > div::before {
-        content: "";
-        position: absolute;
-        inset: 0;
-        border-radius: inherit;
-        padding: 1px;
-        background: linear-gradient(to right, ${props => props.theme['purple']}, ${props => props.theme['yellow']});
-        -webkit-mask: 
-            linear-gradient(white 0 0) content-box, 
-            linear-gradient(white 0 0);
-        mask: 
-            linear-gradient(white 0 0) content-box, 
-            linear-gradient(white 0 0);
-        -webkit-mask-composite: xor;
-        mask-composite: exclude;
-        z-index: -1;
-    }
-
-
-`

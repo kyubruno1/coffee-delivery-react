@@ -1,8 +1,9 @@
+/* eslint-disable react-refresh/only-export-components */
 import { createContext, ReactNode, useState } from "react";
 import { Product } from "../components/Cards";
 
 //Crio uma interface pro produto
-interface CartItem {
+export interface CartItem {
     product: Product,
     quantity: number
 }
